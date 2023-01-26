@@ -8,19 +8,20 @@ bp = Blueprint("user_bp", __name__, url_prefix="/users")
 def create_user():
     request_body = request.get_json()
 
-    # check to see if exists in db
-    test_user = User.query.filter(User.email == request_body["email"]).first()
-    if test_user is not None:
-        return make_response('User in database')
-
     new_user = User.from_dict(request_body)
+
+    # check to see if exists in db
+    existing_user = User.query.filter(User.email == request_body["email"]).first()
+    if existing_user is not None:
+        user_dict = existing_user.to_dict()
+        return make_response(jsonify(user_dict, 201))
 
     db.session.add(new_user)
     db.session.commit()
 
     user_dict = new_user.to_dict()
 
-    return make_response(jsonify({"user": user_dict}, 201))
+    return make_response(jsonify(user_dict, 201))
 
 
 @bp.route("", methods=["GET"])
