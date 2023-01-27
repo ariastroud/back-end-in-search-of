@@ -19,6 +19,7 @@ class Item(db.Model):
             "size": self.size,
             "description": self.description,
             "user_id": self.user_id,
+            "user": self.user.name
         }
         return item_as_dict
     
@@ -31,5 +32,6 @@ class Item(db.Model):
             size=item_data["size"],
             description=item_data["description"],
             user_id=item_data["user_id"],
+            user=item_data["user.name"]
         )
         return new_item
