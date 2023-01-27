@@ -17,19 +17,6 @@ def validate_model(cls, model_id):
 
     return model
 
-@bp.route("", methods=["POST"])
-def create_user():
-    request_body = request.get_json()
-
-    new_item = Item.from_dict(request_body)
-
-    db.session.add(new_item)
-    db.session.commit()
-
-    item_dict = new_item.to_dict()
-
-    return make_response(jsonify({"item": item_dict}, 201))
-
 @bp.route("", methods=["GET"])
 def read_all_items():
     items = Item.query.all()

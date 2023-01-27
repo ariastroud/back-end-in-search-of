@@ -7,7 +7,8 @@ class Item(db.Model):
     category = db.Column(db.String)
     size = db.Column(db.String)
     description = db.Column(db.String)
-    # some nested attribute like which user post belongs to
+    user_id = db.Column(db.Integer, db.ForeignKey('user.user_id'))
+    user = db.relationship("User", back_populates="items")
 
     def to_dict(self):
         item_as_dict = {
@@ -16,7 +17,8 @@ class Item(db.Model):
             "brand": self.brand,
             "category": self.category,
             "size": self.size,
-            "description": self.description
+            "description": self.description,
+            "user_id": self.user_id,
         }
         return item_as_dict
     
@@ -27,6 +29,7 @@ class Item(db.Model):
             brand=item_data["brand"],
             category=item_data["category"],
             size=item_data["size"],
-            description=item_data["description"]
+            description=item_data["description"],
+            user_id=item_data["user_id"],
         )
         return new_item
