@@ -26,7 +26,7 @@ def create_user():
 
     # check to see if exists in db
     existing_user = User.query.filter(User.email == request_body["email"]).first()
-    if existing_user is not None:
+    if existing_user:
         user_dict = existing_user.to_dict()
         return make_response(jsonify(user_dict, 201))
 
@@ -48,6 +48,7 @@ def create_item(user_id):
         category=request_body["category"],
         size=request_body["size"],
         description=request_body["description"],
+        file=request_body["file"],
         user=user
     )
 

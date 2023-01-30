@@ -7,6 +7,7 @@ class Item(db.Model):
     category = db.Column(db.String)
     size = db.Column(db.String)
     description = db.Column(db.String)
+    file = db.Column(db.String)
     user_id = db.Column(db.Integer, db.ForeignKey('user.user_id'))
     user = db.relationship("User", back_populates="items")
 
@@ -18,6 +19,7 @@ class Item(db.Model):
             "category": self.category,
             "size": self.size,
             "description": self.description,
+            "file": self.file,
             "user_id": self.user_id,
             "user": self.user.name
         }
@@ -31,6 +33,7 @@ class Item(db.Model):
             category=item_data["category"],
             size=item_data["size"],
             description=item_data["description"],
+            file=item_data["file"],
             user_id=item_data["user_id"],
             user=item_data["user.name"]
         )
