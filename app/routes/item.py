@@ -19,8 +19,22 @@ def validate_model(cls, model_id):
 
 @bp.route("", methods=["GET"])
 def read_all_items():
+
     items = Item.query.all()
 
+    items_response = [item.to_dict() for item in items]
+
+    return jsonify(items_response), 200
+
+@bp.route("search", methods=["GET"])
+def search_items():
+    title_query = request.args.get("title")
+
+    if title_query:
+        items = Item.query.filter(Item.title.ilike(f'%{title_query}%'))
+    else:
+        return (f'something went wrong~')
+    
     items_response = [item.to_dict() for item in items]
 
     return jsonify(items_response), 200

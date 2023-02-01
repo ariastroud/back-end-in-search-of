@@ -55,8 +55,10 @@ def create_item(user_id):
     db.session.add(new_item)
     db.session.commit()
 
+    item_dict = new_item.to_dict()
 
-    return make_response(jsonify(f"Item {new_item.title} by {new_item.user.name} posted"), 201)
+
+    return make_response(jsonify({"item": item_dict}), 201)
 
 @bp.route("/<user_id>/items", methods=["GET"])
 def read_items_by_user(user_id):
