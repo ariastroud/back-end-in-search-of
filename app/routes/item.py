@@ -53,11 +53,41 @@ def read_all_items():
 @bp.route("search", methods=["GET"])
 def search_items():
     title_query = request.args.get("title")
+    filter_query = request.args.get("filter")
 
-    if title_query:
-        items = Item.query.filter(Item.title.ilike(f'%{title_query}%'))
+    if filter_query == "xs":
+        items = Item.query.filter(Item.title.ilike(f'%{title_query}%')).filter(Item.size == "XS (0-2)")
+    elif filter_query == "s":
+        items = Item.query.filter(Item.title.ilike(f'%{title_query}%')).filter(Item.size == "S (4-6)")
+    elif filter_query == "m":
+        items = Item.query.filter(Item.title.ilike(f'%{title_query}%')).filter(Item.size == "M (8-10)")
+    elif filter_query == "l":
+        items = Item.query.filter(Item.title.ilike(f'%{title_query}%')).filter(Item.size == "L (12-14)")
+    elif filter_query == "xl":
+        items = Item.query.filter(Item.title.ilike(f'%{title_query}%')).filter(Item.size == "XL (16)")
+    elif filter_query == "2xl":
+        items = Item.query.filter(Item.title.ilike(f'%{title_query}%')).filter(Item.size == "2XL (18-20)")
+    elif filter_query == "clothing":
+        items = Item.query.filter(Item.title.ilike(f'%{title_query}%')).filter(Item.category == "Clothing")
+    elif filter_query == "handbags":
+        items = Item.query.filter(Item.title.ilike(f'%{title_query}%')).filter(Item.category == "Handbags")
+    elif filter_query == "jewelry":
+        items = Item.query.filter(Item.title.ilike(f'%{title_query}%')).filter(Item.category == "Jewelry")
+    elif filter_query == "accessories":
+        items = Item.query.filter(Item.title.ilike(f'%{title_query}%')).filter(Item.category == "Accessories")
+    elif filter_query == "shoes":
+        items = Item.query.filter(Item.title.ilike(f'%{title_query}%')).filter((Item.category == "Shoes"))
     else:
-        return (f'something went wrong~')
+        items = Item.query.filter(Item.title.ilike(f'%{title_query}%'))
+    # if title_query:
+    #     items = Item.query.filter(Item.title.ilike(f'%{title_query}%'))
+    # if filter_query == "xs":
+    #     items = Item.query.filter(Item.size == "XS (0-2)")
+    # items = items.all()
+
+
+    # else:
+    #     return (f'something went wrong~')
     
     items_response = [item.to_dict() for item in items]
 
