@@ -8,6 +8,7 @@ class Item(db.Model):
     size = db.Column(db.String)
     description = db.Column(db.String)
     file = db.Column(db.String)
+    found = db.Column(db.Boolean, default=False)
     user_id = db.Column(db.Integer, db.ForeignKey('user.user_id'))
     user = db.relationship("User", back_populates="items")
 
@@ -21,7 +22,9 @@ class Item(db.Model):
             "description": self.description,
             "file": self.file,
             "user_id": self.user_id,
-            "user": self.user.name
+            "user": self.user.name,
+            "email": self.user.email,
+            "found": self.found
         }
         return item_as_dict
     
@@ -35,6 +38,8 @@ class Item(db.Model):
             description=item_data["description"],
             file=item_data["file"],
             user_id=item_data["user_id"],
-            user=item_data["user.name"]
+            user=item_data["user.name"],
+            email=item_data["email"],
+            found=item_data["found"]
         )
         return new_item

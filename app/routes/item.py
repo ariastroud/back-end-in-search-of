@@ -21,7 +21,9 @@ def validate_model(cls, model_id):
 def read_all_items():
     filter_query = request.args.get("filter")
 
-    if filter_query == "xs":
+    if filter_query == "none":
+        items = Item.query.filter(Item.size == "N/A")
+    elif filter_query == "xs":
         items = Item.query.filter(Item.size == "XS (0-2)")
     elif filter_query == "s":
         items = Item.query.filter(Item.size == "S (4-6)")
@@ -39,12 +41,12 @@ def read_all_items():
         items = Item.query.filter(Item.category == "Handbags")
     elif filter_query == "jewelry":
         items = Item.query.filter(Item.category == "Jewelry")
-    elif filter_query == "accessories":
-        items = Item.query.filter(Item.category == "Accessories")
+    # elif filter_query == "accessories":
+    #     items = Item.query.filter(Item.category == "Accessories")
     elif filter_query == "shoes":
         items = Item.query.filter(Item.category == "Shoes")
     else:
-        items = Item.query.all()
+        items = Item.query.order_by(Item.item_id.desc())
 
     items_response = [item.to_dict() for item in items]
 
@@ -73,8 +75,8 @@ def search_items():
         items = Item.query.filter(Item.title.ilike(f'%{title_query}%')).filter(Item.category == "Handbags")
     elif filter_query == "jewelry":
         items = Item.query.filter(Item.title.ilike(f'%{title_query}%')).filter(Item.category == "Jewelry")
-    elif filter_query == "accessories":
-        items = Item.query.filter(Item.title.ilike(f'%{title_query}%')).filter(Item.category == "Accessories")
+    # elif filter_query == "accessories":
+    #     items = Item.query.filter(Item.title.ilike(f'%{title_query}%')).filter(Item.category == "Accessories")
     elif filter_query == "shoes":
         items = Item.query.filter(Item.title.ilike(f'%{title_query}%')).filter((Item.category == "Shoes"))
     else:
@@ -101,4 +103,25 @@ def delete_item(item_id):
     db.session.commit()
 
     return (f"Item {item.item_id} successfully deleted!")
+
+@bp.route("<item_id>/mark_found", methods=["PATCH"])
+def update_item(item_id):
+    item = validate_model(Item, item_id)
+    item.found = True
+    db.session.commit()
+
+    return {"item": item.to_dict()}
+
+@bp.route("/<item_id>", methods=["GET"])
+def handle_item(item_id):
+    item = validate_model(Item, item_id)
+    item_response = item.to_dict()
+
+    return jsonify(item_response), 200
+
+
+
+
+
+
 
