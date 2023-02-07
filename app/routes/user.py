@@ -62,7 +62,15 @@ def create_item(user_id):
 
 @bp.route("/<user_id>/items", methods=["GET"])
 def read_items_by_user(user_id):
-    item_query = Item.query.filter(Item.user_id == user_id).all()
+    filter_query = request.args.get("filter")
+    # item_query = Item.query.filter(Item.user_id == user_id).all()
+
+    if filter_query == "xs":
+        item_query = Item.query.filter(Item.user_id == user_id).filter(Item.size == "XS (0-2)")
+    elif filter_query == "2xl":
+        item_query = Item.query.filter(Item.user_id == user_id).filter(Item.size == "2XL (18-20)")
+    else:
+        item_query = Item.query.filter(Item.user_id == user_id).all()
     item_response = [item.to_dict() for item in item_query]
 
     return jsonify(item_response), 201
