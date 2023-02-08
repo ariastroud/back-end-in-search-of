@@ -63,14 +63,22 @@ def create_item(user_id):
 @bp.route("/<user_id>/items", methods=["GET"])
 def read_items_by_user(user_id):
     filter_query = request.args.get("filter")
-    # item_query = Item.query.filter(Item.user_id == user_id).all()
 
-    if filter_query == "xs":
-        item_query = Item.query.filter(Item.user_id == user_id).filter(Item.size == "XS (0-2)")
-    elif filter_query == "2xl":
-        item_query = Item.query.filter(Item.user_id == user_id).filter(Item.size == "2XL (18-20)")
+    size_filters = ["none", "xs", "s", "m", "l", "xl", "2xl"]
+    size_filters_strings = ["N/A", "XS (0-2)", "S (4-6)", "M (8-10)", "L (12-14)", "XL (16)", "2XL (18-20)"]
+
+    category_filters = ["clothing", "handbags", "jewelry", "shoes"]
+    category_filters_strings = ["Clothing", "Handbags", "Jewelry", "Shoes"]
+
+    if filter_query in size_filters:
+        filter_string_index = int(size_filters.index(filter_query))
+        item_query = Item.query.filter(Item.user_id == user_id).filter(Item.size == size_filters_strings[filter_string_index]).order_by(Item.item_id.desc())
+    elif filter_query in category_filters:
+        filter_string_index = int(category_filters.index(filter_query))
+        item_query = Item.query.filter(Item.user_id == user_id).filter(Item.category == category_filters_strings[filter_string_index]).order_by(Item.item_id.desc())
     else:
-        item_query = Item.query.filter(Item.user_id == user_id).all()
+        item_query = Item.query.filter(Item.user_id == user_id).order_by(Item.item_id.desc()).all()
+
     item_response = [item.to_dict() for item in item_query]
 
     return jsonify(item_response), 201
