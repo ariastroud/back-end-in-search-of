@@ -64,8 +64,8 @@ def create_item(user_id):
 def read_items_by_user(user_id):
     filter_query = request.args.get("filter")
 
-    size_filters = ["none", "xs", "s", "m", "l", "xl", "2xl"]
-    size_filters_strings = ["N/A", "XS (0-2)", "S (4-6)", "M (8-10)", "L (12-14)", "XL (16)", "2XL (18-20)"]
+    size_filters = ["none", "xs", "s", "m", "l", "xl", "2xl", "5", "6", "7", "8", "9", "10", "11"]
+    size_filters_strings = ["N/A", "XS (0-2)", "S (4-6)", "M (8-10)", "L (12-14)", "XL (16)", "2XL (18-20)", "5", "6", "7", "8", "9", "10", "11"]
 
     category_filters = ["clothing", "handbags", "jewelry", "shoes"]
     category_filters_strings = ["Clothing", "Handbags", "Jewelry", "Shoes"]
